@@ -1,10 +1,9 @@
 import React from 'react';
 import './Login.css';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logo from '../../images/logo.svg';
 
 function Login() {
-  let path = useRouteMatch();
   return (
     <section className='login'>
       <div className='login__block'>
