@@ -1,0 +1,151 @@
+.search {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1280px;
+	padding: 0;
+  background-color: #202020;
+}
+
+.search__container {
+  padding: 80px 70px 10px;
+  margin: 0;
+  background-color: #202020;
+}
+
+.search__form {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto 31px;
+}
+
+.search__block {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.search__input {
+  margin: 0 10px 0 0;
+  height: 48px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background-color: #2F2F2F;
+  padding: 15px 22px;
+  border: none;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  color: #8B8B8B;
+  outline: none;
+}
+
+.search__input:focus {
+  box-shadow: 0 0 7px #8B8B8B;
+}
+
+.search__button {
+  min-width: 70px;
+  min-height: 44px;
+  background-color: #4285F4;
+  border: none;
+  border-radius: 40px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  color: #fff;
+  cursor: pointer;
+	transition: 0.5s ease;
+	opacity: 1;
+  margin: 0;
+  padding: 0;
+}
+
+.search__button:hover {
+  opacity: 0.8;
+}
+
+.search__toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 44px 0;
+}
+
+.search__title {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  color: #fff;
+  margin: 0;
+}
+
+.search__toggle-button {
+	width: 36px;
+	height: 20px;
+	align-self: center;
+	background-color: #343434;;
+	border: none;
+	border-radius: 20px;
+	display: flex;
+	padding: 2px;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+.search__toggle-disk {
+	width: 16px;
+	height: 16px;
+	margin-left: auto;
+	background-color: #2BE080;
+	border: 1px solid #fff;
+	border-radius: 50px;
+	align-self: center;
+}
+
+.search__toggle-disk_off {
+	margin-left: inherit;
+  background-color: #888787;
+}
+
+.search__line {
+  width: 100%;
+  height: 1px;
+  background-color: #424242;
+}
+
+@media screen and (max-width: 769px) {
+  .search__toggle {
+    margin: 0 0 40px 0;
+  }
+
+  .search__container {
+    padding: 80px 30px 10px;
+    margin: 0;
+    background-color: #202020;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .search__container {
+    padding: 81px 14px 10px;
+  }
+
+  .search__form {
+    margin: 0 auto 45px;
+  }
+
+  .search__input {
+    font-size: 12px;
+    padding: 13px 16px;
+  }
+
+  .search__title {
+    font-size: 11px;
+  }
+}
