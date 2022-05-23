@@ -10,7 +10,6 @@ import Footer from '../Footer/Footer';
 
 function Main({loggedIn}) {
   return (
-    <>
       <div>
         <section className='main'>
           <Header loggedIn={loggedIn}/>
@@ -22,7 +21,6 @@ function Main({loggedIn}) {
           <Footer />
         </section>
       </div>
-    </>
   );
 }
 

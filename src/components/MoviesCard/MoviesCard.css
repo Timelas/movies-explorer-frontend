@@ -16,6 +16,15 @@
   border-radius: 6px;
 }
 
+.moviecard__box {
+  height: 201px;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	overflow: hidden;
+	cursor: inherit;
+}
+
 .moviecard__pic {
   object-fit: cover;
 	width: 100%;

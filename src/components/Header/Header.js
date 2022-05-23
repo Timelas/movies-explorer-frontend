@@ -7,10 +7,8 @@ import profileIcon from '../../images/profileIcon.svg';
 import { Link, useLocation } from "react-router-dom";
 
 
-function Header() {
-  let loggedIn;
-  const { pathname } = useLocation();
-  loggedIn = pathname === '/profile';
+function Header({loggedIn}) {
+  const { pathname } = useLocation();;
   const isColor = pathname === '/' ? '' : 'header_color';
   const isTablet = window.matchMedia('(max-width: 1023px)').matches;
   const [isBurgerMenuOpened, setIsBurgerMenuOpened] = React.useState(false);
