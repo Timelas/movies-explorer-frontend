@@ -55,7 +55,7 @@ function MoviesCardList({
   }
   return (
     <section className={`movieslist ${visibleMovie}`}>
-            {pathname === "/movies" && (renderMovie.length > 0 || savedMovies.length > 0) ?
+            {(pathname === "/movies") || (pathname === "/saved-movies") && (renderMovie.length > 0 || savedMovies.length > 0) ?
         ''
       :
       <p className='movieslist-error'>Фильмы отсуствуют</p>
