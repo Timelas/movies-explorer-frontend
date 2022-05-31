@@ -60,7 +60,7 @@ class MainApi {
   updateHeaders() {
       this._headers = {
           'Content-type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+          'Authorization': `${localStorage.getItem('jwt')}`
       }
   }
 

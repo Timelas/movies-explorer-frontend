@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 
 function MoviesCardList({
   renderMovie,
-  handleMoreRenderMovies,
+  handleMoreRenderMovie,
   movies,
   visibleMovie,
   setRenderMovie,
@@ -58,7 +58,7 @@ function MoviesCardList({
             {pathname === "/movies" && (renderMovie.length > 0 || savedMovies.length > 0) ?
         ''
       :
-      <p>Not Found</p>
+      <p className='movieslist-error'>Фильмы отсуствуют</p>
       }
 <section className='movieslist__section'>
 <ul className="movies__list">
@@ -82,7 +82,7 @@ function MoviesCardList({
                 key={movie._id}
                 cardName={movie.nameRU}
                 timeDuration={parseTimeFilm(movie.duration)}
-                imageLink={`https://api.nomoreparties.co${movie.image.url}`}
+                imageLink={`${movie.image}`}
                 trailerLink={movie.trailerLink}
                 addMovie={addMovie}
                 savedMovies={savedMovies}
@@ -95,7 +95,7 @@ function MoviesCardList({
         <button
           className={`movies__button ${visibilityButton}`}
           type="button"
-          onClick={handleMoreRenderMovies}
+          onClick={handleMoreRenderMovie}
         >
           Ещё
         </button>

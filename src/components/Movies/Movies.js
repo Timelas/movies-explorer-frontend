@@ -63,7 +63,7 @@ function Movies({ isLogin }) {
     if (isShortFilms) {
       return shortMoviesHandle(films);
     }
-    return films.filter((movie) => movie.duration >= 40);
+    return films.filter((films) => films.duration >= 40);
   }
 
   const filteredMovies = React.useMemo(

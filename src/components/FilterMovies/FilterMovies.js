@@ -9,7 +9,7 @@ function FilterMovies({ filterText, setIsShortFilms, isShortFilms }) {
           type="checkbox"
           className="filter-checkbox__input"
           onClick={() => {
-            setIsShortFilms(isShortFilms);
+            setIsShortFilms(!isShortFilms);
           }}
         />
         <span className="filter-checkbox__round" />
