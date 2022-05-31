@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 
 function MoviesCardList({
   renderMovie,
-  handleMoreRenderMovie,
+  handleMoreRenderMovies,
   movies,
   visibleMovie,
   setRenderMovie,
@@ -95,7 +95,7 @@ function MoviesCardList({
         <button
           className={`movies__button ${visibilityButton}`}
           type="button"
-          onClick={handleMoreRenderMovie}
+          onClick={handleMoreRenderMovies}
         >
           Ещё
         </button>
