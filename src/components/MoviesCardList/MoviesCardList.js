@@ -1,83 +1,111 @@
-import React from 'react';
-import { useEffect, useState, useCallback } from 'react';
-import { debounce } from 'lodash';
-import './MoviesCardList.css';
-import MoviesCard from '../MoviesCard/MoviesCard';
-import '../More/More.css';
-import { LargeWindowSize, MediumWindowSize, SmallWindowSize } from '../../utils/consts';
+import React from "react";
+import "./MoviesCardList.css";
+import MoviesCard from "../MoviesCard/MoviesCard";
+import { useLocation } from "react-router-dom";
 
-function MoviesCardList(props) {
-  const [filteredMovies, setFilteredMovies] = useState([]);
-  const [windowSize, setWindowSize] = useState(window.innerWidth);
+function MoviesCardList({
+  renderMovie,
+  handleMoreRenderMovie,
+  movies,
+  visibleMovie,
+  setRenderMovie,
+  countInitCards,
+  addMovie,
+  savedMovies,
+  deleteMovie,
+  setVisibilityButton,
+  setVisibleMovie,
+  visibilityButton,
 
-  function moviesCount() {
-    if (windowSize >= LargeWindowSize) return { count: 12, more: 3 };
-    if (windowSize >= MediumWindowSize) return { count: 8, more: 2 };
-    if (windowSize >= SmallWindowSize) return { count: 5, more: 1 };
+}) {
+  const { pathname } = useLocation();
+  const [visibilityTextNotFound, setVisibilityTextNotFound] = React.useState("");
+
+  React.useEffect(() => {
+    const cards = countInitCards();
+
+    if (pathname === "/saved-movies") {
+      setVisibilityButton("movies__button_visibility");
+      setVisibilityTextNotFound("movies__button_visibility");
+    } else {
+      setVisibilityTextNotFound("");
+    }
+
+    if (
+      localStorage.getItem("foundFilms") &&
+      JSON.parse(localStorage.getItem("foundFilms")).length > 0
+    ) {
+      setVisibleMovie("movies__visibility");
+    }
+
+    if (localStorage.getItem("foundFilms")) {
+      setRenderMovie(
+        JSON.parse(localStorage.getItem("foundFilms")).slice(0, cards)
+      );
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [movies, setRenderMovie, pathname]);
+
+  function parseTimeFilm(parseMinute) {
+    const hours = Math.floor(parseMinute / 60);
+    const minutes = parseMinute % 60;
+    const durationTime = `${hours}ч ${minutes}м`;
+    return durationTime;
   }
-
-  const handler = useCallback(
-    debounce(function () {
-      setWindowSize(window.innerWidth);
-    }, 500),
-    []
-  );
-
-  const onChange = () => {
-    handler();
-  };
-
-  useEffect(() => {
-    const newMovies = props?.cards?.slice(0, moviesCount().count);
-    setFilteredMovies(newMovies);
-  }, [props.cards, windowSize]);
-
-  useEffect(() => {
-    window.addEventListener('resize', onChange);
-    return () => {
-      window.removeEventListener('resize', onChange);
-    };
-  }, []);
-
-  const onMoreButtonClick = () => {
-    setFilteredMovies(props?.cards?.slice(0, (filteredMovies.length += moviesCount().more)));
-  };
-
   return (
-    <section className='movieslist'>
-        <section className='movieslist__section'>
-        {props.isSearched && props.cards.length === 0 && !props.isLoading
-          ? (<p className='cards__not-found'>Ничего не найдено</p>)
-          : <ul className='cards__list'>
-{props?.cards?.reduce((filmsBatch, item) => {
-            if (filmsBatch?.length < filteredMovies?.length) {
-              filmsBatch.push(
-                <MoviesCard
-                  handleSaveMovie={props.handleSaveMovie}
-                  card={item}
-                  key={item.id}
-                  savedMovies={props.savedMovies}
-                  deleteMovie={props.deleteMovie}
-                  isSaved={props?.savedMovies?.some((card) => card.nameRU.toLowerCase() === item.nameRU.toLowerCase())}
-                />
-              );
-            }
-            return filmsBatch;
-          }, [])}
-        </ul>
-     }
-     <div className='more'>
-          {props?.cards?.length > filteredMovies?.length
-          ? (
-            <button className='more__button' onClick={onMoreButtonClick} type='button'>
-              Ещё
-            </button>
-          ) : null}
+    <section className={`movieslist ${visibleMovie}`}>
+            {pathname === "/movies" && (renderMovie.length > 0 || savedMovies.length > 0) ?
+        ''
+      :
+      <p>Not Found</p>
+      }
+<section className='movieslist__section'>
+<ul className="movies__list">
+        {pathname === "/movies"
+          ? renderMovie.map((movie) => (
+              <MoviesCard
+                key={movie.id}
+                cardName={movie.nameRU}
+                timeDuration={parseTimeFilm(movie.duration)}
+                imageLink={`https://api.nomoreparties.co${movie.image.url}`}
+                trailerLink={movie.trailerLink}
+                movie={movie}
+                addMovie={addMovie}
+                savedMovies={savedMovies}
+                deleteMovie={deleteMovie}
+              />
+            ))
+          : savedMovies.map((movie) => (
+              <MoviesCard
+                movie={movie}
+                key={movie._id}
+                cardName={movie.nameRU}
+                timeDuration={parseTimeFilm(movie.duration)}
+                imageLink={`https://api.nomoreparties.co${movie.image.url}`}
+                trailerLink={movie.trailerLink}
+                addMovie={addMovie}
+                savedMovies={savedMovies}
+                deleteMovie={deleteMovie}
+              />
+            ))}
+      </ul>
+      {movies.length > renderMovie.length || pathname !== "/saved-movies" ? (
+        <div className="movies__btn">
+        <button
+          className={`movies__button ${visibilityButton}`}
+          type="button"
+          onClick={handleMoreRenderMovie}
+        >
+          Ещё
+        </button>
         </div>
-          </section>
-      </section>
-
+      ) : (
+        ""
+      )}
+    </section>
+    </section>
   );
-};
+}
 
 export default MoviesCardList;

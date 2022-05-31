@@ -1,24 +1,22 @@
 import React from 'react';
 import './Register.css';
 import { Link } from 'react-router-dom';
+import Form from "../Form/Form";
 import logo from '../../images/logo.svg';
-import formValidation from '../../hooks/formValidation';
+import CallbackValidation  from '../../hooks/Validity';
 
-function Register(props) {
-  const { values, handleChange, resetForm, errors, isValid } = formValidation();
+function Register({ handleRegister, registrationError }) {
+  const callbackValidation = CallbackValidation();
+  const { email, password, name } = callbackValidation.values;
+  const { values, onFocus, handleChange, isFocused, errors } =
+    callbackValidation;
 
-  React.useEffect(() => {
-    resetForm({});
-  }, [resetForm]);
-
-  function handleSubmit(e) {
+  const submitHandle = (e) => {
     e.preventDefault();
-    if (!values.email || !values.password) {
-      return;
-    }
-    const { name, email, password } = values;
-    props.onRegister({ name, email, password });
-  }
+    handleRegister(name, email, password);
+    callbackValidation.resetForm();
+  };
+
   return (
     <section className='register'>
       <div className='register__block'>
@@ -27,50 +25,36 @@ function Register(props) {
       </Link>
         <h2 className='register__heading'>Добро пожаловать!</h2>
       </div>
-      <form className='register__form' onSubmit={handleSubmit} noValidate>
-        <div className='register__input'>
-          <span className='register__input-name'>Имя</span>
-          <input className='register__field' disabled={props.isLoading} autoComplete='new-name' onChange={handleChange} id='name' name='name' type='text' minLength='2' maxLength='40' required value={values.name || '' } />
-        {errors.name ? (<span className='register__input_error'>{errors.name}</span>) : null}
-        </div>
-        <div className='register__input'>
-          <span className='register__input-name'>E-mail</span>
-          <input className='register__field' disabled={props.isLoading}
-          autoComplete='new-email'
-          onChange={handleChange}
-          id='email' name='email'
-          type='email'
-          required
-          value={values.email || ''}
-        />
-        {errors.email ? (<span className='register__input_error'>{errors.email}</span>) : null}
-
-        </div>
-        <div className='register__input'>
-          <span className='register__input-name'>Пароль</span>
-          <input className='register__field register__field_password'  disabled={props.isLoading}
-          autoComplete='new-password'
-          onChange={handleChange}
-          id='password'
-          name='password'
-          type='password'
-          required
-          minLength='10'
-          value={values.password || ''}
-        />
-        {errors.password ? (<span className='register__input_error'>{errors.password}</span>) : null}
-        <span className='register__message'>{props.message}</span>
-        </div>
-        <button type='submit' className={`register__form_button ${!isValid || props.isLoading ? 'register__form_button_disabled' : ''} `}>
-          Зарегистрироваться
-        </button>
-        <div className='register__signin'>
-          <p className='register__link-title'>Уже зарегистрированы?</p>
-          <Link to='/signin' className='register__login-link'>
-            Войти
-          </Link>
-        </div>
-      </form>
+      <Form
+          submitText={{
+            buttonText: "Зарегистрироваться",
+            promt: "Уже зарегистрированы?",
+            route: "/signin",
+            linkText: "Войти",
+          }}
+          registrationError={registrationError}
+          submitHandle={submitHandle}
+          validation={callbackValidation}
+          formName="register"
+        >
+          <div className='form__input'>
+          <label htmlFor="name" className="form__input-name">
+            Имя
+          </label>
+          <input
+            id="name"
+            name="name"
+            className="form__field"
+            minLength="2"
+            type="text"
+            required
+            value={values.name || ""}
+            onFocus={onFocus}
+            onChange={handleChange}
+          />
+          <span className="form__input-error">{isFocused && errors.name}</span>
+          </div>
+ </Form>
     </section>
   );
 }

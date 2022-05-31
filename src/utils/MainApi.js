@@ -1,84 +1,118 @@
 class MainApi {
-  constructor({baseUrl, headers}) {
-    this._baseUrl = baseUrl;
-    this._headers = headers
+  constructor({ adress, headers }) {
+      this._adress = adress;
+      this._headers = headers;
   }
 
-  _getResponseData(res) {
-    if (!res.ok) {
-        return Promise.reject(`Ошибка: ${res.status}`);
-    }
-    return res.json();
+  getUser() {
+      return fetch(`${this._adress}/api/users/me`, {
+          headers: this._headers,})
+          .then(res => this._checkStatus(res))
   }
 
-  getUserInfo() {
-    return fetch(`${this._baseUrl}/users/me`, {
-      method: 'GET',
-      headers: this._headers,
-      credentials: 'include'
-  })
-  .then((res) => this._getResponseData(res));
-  }
-
-  editUserInfo({ email, name }) {
-    return fetch(`${this._baseUrl}/users/me`, {
-      method: 'PATCH',
-      headers: this._headers,
-      credentials: 'include',
-      body: JSON.stringify({
-        email,
-        name,
-      }),
-    })
-  .then((res) => this._getResponseData(res));
-  }
-
-  deleteMovieFromSaved(cardId) {
-      return fetch(`${this._baseUrl}/movies/${cardId}`, {
-        method: 'DELETE',
-        headers: this._headers,
-        credentials: 'include'
+  setUser(name, email) {
+      return fetch(`${this._adress}/api/users/me`, {
+          method: 'PATCH',
+          headers: this._headers,
+          body: JSON.stringify({
+              name, email
+          })
       })
-      .then((res) => this._getResponseData(res));
+      .then(res => this._checkStatus(res))
   }
 
-  saveMovie(data) {
-    const movieURL = 'https://api.nomoreparties.co';
-    return fetch(`${this._baseUrl}/movies`, {
-      method: 'POST',
-      headers: this._headers,
-      credentials: 'include',
-      body: JSON.stringify({
-        country: data.country || ' ',
-        director: data.director || ' ',
-        duration: data.duration || ' ',
-        year: data.year || ' ',
-        description: data.description || ' ',
-        image: `${movieURL}${data.image.url}` || ' ',
-        trailerLink: data.trailerLink || ' ',
-        thumbnail: `${movieURL}${data.image.formats.thumbnail.url}` || ' ',
-        movieId: data.id || ' ',
-        nameRU: data.nameRU || ' ',
-        nameEN: data.nameEN || ' ',
-      }),
-    })
-    .then((res) => this._getResponseData(res));
+  register(name, email, password) {
+      return fetch(`${this._adress}/api/signup`, {
+          method: 'POST',
+          headers: this._headers,
+          body: JSON.stringify({
+              email,
+              password,
+              name
+          })
+      })
+      .then((res) => this._checkStatus(res))
+  }
+
+  login(email, password) {
+      return fetch(`${this._adress}/api/signin`, {
+          method: 'POST',
+          headers: this._headers,
+          body: JSON.stringify({email, password})
+      })
+      .then(res => this._checkStatus(res))
+      .then(data => {
+          if(data.token) {
+              localStorage.setItem('jwt', data.token);
+              this.updateHeaders();
+              return data.token;
+          } return Promise.reject(new Error(`Ошибка: ${data.status}`))
+      })
+  }
+
+  logout() {
+      return fetch(`${this._adress}/api/signout`, {
+          method: 'POST',
+          headers: this._headers,
+      }).then(res => this._checkStatus(res))
+  }
+
+  updateHeaders() {
+      this._headers = {
+          'Content-type': 'application/json',
+          'Authorization': `${localStorage.getItem('jwt')}`
+      }
   }
 
   getSavedMovies() {
-    return fetch(`${this._baseUrl}/movies`, {
-      headers: this._headers,
-      credentials: 'include',
-    })
-    .then((res) => this._getResponseData(res));
+      return fetch(`${this._adress}/api/movies`, {headers: this._headers})
+      .then((response) => this._checkStatus(response))
   }
+
+  addMovie(movie) {
+      return fetch(`${this._adress}/api/movies`, {
+          method: 'POST',
+          headers: this._headers,
+          body: JSON.stringify({
+              country:  movie.country,
+              director: movie.director,
+              duration: movie.duration,
+              year: movie.year,
+              description: movie.description,
+              image: `https://api.nomoreparties.co${movie.image.url}`,
+              trailer: movie.trailerLink,
+              movieId: movie.id,
+              nameRU: movie.nameRU,
+              nameEN: movie.nameEN,
+              thumbnail: `https://api.nomoreparties.co${movie.image.url}`
+          })
+      }).then(res => this._checkStatus(res))
+  }
+
+  removeMovie(id) {
+      return fetch(`${this._adress}/api/movies/${id}`, {
+          method: 'DELETE',
+          headers: this._headers
+      })
+      .then(res => this._checkStatus(res))
+  }
+
+
+  _checkStatus(res) {
+      if (!res.ok) {
+        return Promise.reject(`Ошибка ${res.status}`);
+      }
+      return res.json();
+    }
+
 }
 
 const mainApi = new MainApi({
-  //baseUrl: 'http://localhost:3000',
-  baseUrl: 'https://api.krylov.nomoredomains.xyz',
+  //adress: 'http://localhost:3000',
+  adress: 'https://api.moviessave.nomoredomains.work',
   headers: {
-  'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
   },
   credentials: 'include'
 })

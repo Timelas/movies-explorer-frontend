@@ -1,4 +1,4 @@
-.moviecard {
+.card {
   display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -6,7 +6,7 @@
 	max-width: 364px;
 }
 
-.moviecard__block {
+.card__block {
   display: flex;
 	flex-direction: column;
 	width: 100%;
@@ -14,40 +14,28 @@
 	position: relative;
   box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
   border-radius: 6px;
+  list-style: none;
+  min-height: 262px;
 }
 
-.moviecard__box {
-  height: 201px;
-	display: flex;
-	justify-content: center;
-	align-items: flex-start;
-	overflow: hidden;
-	cursor: inherit;
-}
-
-.moviecard__pic {
-  object-fit: cover;
-	width: 100%;
-	border-radius: 6px;
-  margin: 0 0 16px;
-}
-
-.moviecard__info {
+.card__info {
   display: flex;
   justify-content: space-between;
   margin: 0 27px 16px 16px;
+  gap: 10px;
 }
 
-.moviecard__title {
+.card__title {
   font-style: normal;
   font-weight: 500;
   font-size: 13px;
   line-height: 16px;
   color: #fff;
   margin: 0 0 17px;
+
 }
 
-.moviecard__duration {
+.card__duration {
   font-style: normal;
   font-weight: 400;
   font-size: 11px;
@@ -58,7 +46,24 @@
   margin: 0;
 }
 
-.moviecard__button {
+.card__pic {
+  object-fit: cover;
+	width: 100%;
+	border-radius: 6px;
+  margin: 0 0 16px;
+  height: 190px;
+}
+
+.card__box {
+  height: 201px;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	overflow: hidden;
+	cursor: inherit;
+}
+
+.card__button {
   width: 12px;
   height: 14px;
   border: none;
@@ -66,62 +71,36 @@
   padding: 0;
   background-color: #222222;
   transition: opacity 0.3s ease;
+  object-fit: contain;
 }
 
-.moviecard__button:hover {
+.card__button:hover {
   opacity: 0.8;
 }
 
-.moviecard__button-saved {
-  width: 12px;
-  height: 14px;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  background-color: #222222;
-  transition: opacity 0.3s ease;
-}
-
-.moviecard__button-saved:hover {
-  opacity: 0.8;
-}
-
-.moviecard__button-delete {
-  width: 12px;
-  height: 14px;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  background-color: #222222;
-  transition: opacity 0.3s ease;
-}
-
-.moviecard__button-delete:hover {
-  opacity: 0.8;
-}
 
 @media screen and (max-width: 769px) {
-  .moviecard__pic {
+  .card__pic {
     margin: 0 0 14px;
   }
 
-  .moviecard__info {
+  .card__info {
     margin: 0 20px 14px 14px;
   }
 }
 
 @media screen and (max-width: 450px) {
-  .moviecard {
+  .card {
     max-width: 430px;
   }
 
-  .moviecard__title {
+  .card__title {
     font-size: 12px;
     line-height: 15px;
     margin: 0 0 14px;
   }
 
-  .moviecard__duration {
+  .card__duration {
     font-size: 10px;
     line-height: 12px;
   }

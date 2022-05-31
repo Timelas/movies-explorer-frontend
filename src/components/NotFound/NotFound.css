@@ -40,6 +40,8 @@
 	text-decoration: none;
 	margin: 184px auto 60px;
 	cursor: pointer;
+  background-color: transparent;
+  border: none;
 }
 
 @media screen and (max-width: 450px) {
