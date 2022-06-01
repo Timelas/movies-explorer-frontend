@@ -34,7 +34,7 @@ function App() {
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.message);
           setIsLogin(false);
           history.push("/signin");
         });

@@ -43,22 +43,6 @@ function Movies({ isLogin }) {
     }
   }, [pathname]);
 
-  React.useEffect(() => {
-    moviesApi
-      .getMovies()
-      .then((renderMovie) => {
-        if (renderMovie) {
-          setRenderMovie(renderMovie);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    if (pathname === "/movies") {
-      setVisibleMovie("movies__visibility");
-    }
-  }, [pathname]);
-
   function filterMovies(films) {
     if (isShortFilms) {
       return shortMoviesHandle(films);
