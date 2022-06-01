@@ -35,6 +35,8 @@ function App() {
         })
         .catch((err) => {
           console.log(err);
+          setIsLogin(false);
+          history.push("/signin");
         });
     }
   }
