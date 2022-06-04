@@ -7,7 +7,7 @@ import CallbackValidation from '../../hooks/Validity';
 function Profile({
   handleLogout,
   editProfile,
-  isLogin,
+  loggedIn,
   profileError,
   isEditProfile,
 }) {
@@ -29,7 +29,7 @@ function Profile({
 
   return (
     <section className='profile'>
-      <Header bgColor="grey" textColor="white" isLogin={isLogin}/>
+      <Header bgColor="grey" textColor="white" loggedIn={loggedIn}/>
       <h2 className='profile__heading'>Привет, {currentUser && currentUser.name}</h2>
       <div className='profile__content'>
         <form className='profile__form' onSubmit={submitProfile}>

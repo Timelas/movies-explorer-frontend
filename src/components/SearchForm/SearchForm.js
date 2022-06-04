@@ -1,41 +1,63 @@
-import React from 'react';
+import React, { useState } from "react";
 import './SearchForm.css';
-import FilterMovies from "../FilterMovies/FilterMovies";
+// import FilterMovies from "../FilterMovies/FilterMovies";
 
-function SearchForm({
-  searchValue,
-  setSearchValue,
-  onSubmit,
-  inputError,
-  setInputError,
-  isShortFilms,
-  setIsShortFilms,
-}) {
+function SearchForm(props) {
+  const [findedMovie, setFindedMovie] = useState("");
+  const [error, setError] = React.useState("");
+  const [formValid, setFormValid] = React.useState(false);
+
+  function handleSearchMovie(e) {
+    setFindedMovie(e.target.value);
+    if (e.target.value.length === 0) {
+      setError("Нужно ввести слово для поиска");
+    } else {
+      setError("");
+    }
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    setError("");
+    console.log(props.onGetMovies)
+    props.onGetMovies(findedMovie);
+    setFindedMovie("");
+  }
+
+  React.useEffect(() => {
+    if (findedMovie && !error) {
+      setFormValid(true);
+    } else {
+      setFormValid(false);
+    }
+  }, [findedMovie, error]);
+
   return (
     <section className='search'>
       <div className='search__container'>
-       <form className='search__form' onSubmit={onSubmit} noValidate>
+       <form className='search__form' onSubmit={handleSubmit} noValidate>
           <div className='search__block'>
             <input className='search__input'
-            type='search'
-            name='keyWord'
-            value={searchValue}
-            id='search'
-            onChange={(evt) => {setSearchValue(evt.target.value);}}
-            placeholder='Фильм'
-            autoComplete='off'
-            minLength='1'
-            maxLength='200'
-            required
-            onClick={() => setInputError("")}/>
-            <button className='search__button' type='submit'>Найти</button>
+                type="text"
+                name="search"
+                placeholder="Фильм"
+                minLength="2"
+                maxLength="40"
+                value={findedMovie}
+                onChange={handleSearchMovie}
+                required
+            // onClick={() => setInputError("")}
+            />
+            <button className='search__button' type='submit'
+            onClick={handleSubmit}
+            disabled={!formValid}>Найти</button>
           </div>
         </form>
-        <FilterMovies
+        {/* <FilterMovies
           filterText="Короткометражки"
           isShortFilms={isShortFilms}
           setIsShortFilms={setIsShortFilms}
-        />
+        /> */}
         <div className='search__line'></div>
       </div>
     </section>

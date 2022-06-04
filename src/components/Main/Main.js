@@ -6,7 +6,7 @@ import Techs from '../Techs/Techs';
 import AboutMe from '../AboutMe/AboutMe';
 import Portfolio from '../Portfolio/Portfolio';
 
-function Main({loggedIn}) {
+function Main() {
   return (
       <div>
         <section className='main'>

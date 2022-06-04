@@ -4,9 +4,15 @@ class MainApi {
       this._headers = headers;
   }
 
-  getUser() {
+  getUser(token) {
       return fetch(`${this._adress}/api/users/me`, {
-          headers: this._headers,})
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
           .then(res => this._checkStatus(res))
   }
 
@@ -42,10 +48,10 @@ class MainApi {
       })
       .then(res => this._checkStatus(res))
       .then(data => {
-          if(data.token) {
+          if (data.token) {
               localStorage.setItem('jwt', data.token);
               this.updateHeaders();
-              return data.token;
+              return data;
           } return Promise.reject(new Error(`Ошибка: ${data.status}`))
       })
   }
@@ -112,7 +118,7 @@ const mainApi = new MainApi({
   adress: 'https://api.moviessave.nomoredomains.work',
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+    // 'Authorization': `Bearer ${localStorage.getItem('jwt')}`
   },
   credentials: 'include'
 })
