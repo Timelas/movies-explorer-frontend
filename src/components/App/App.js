@@ -53,8 +53,6 @@ function App() {
           history.push("/signin");
         });
     }
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -289,7 +287,7 @@ function App() {
           setCurrentUser(userData);
 
           const savedMoviesList = savedMovies.filter(
-            (item) => item.owner._id === userData._id
+            (item) => item.owner === userData._id
           );
           localStorage.setItem("userMovies", JSON.stringify(savedMoviesList));
           setUserMovies(savedMoviesList);
@@ -316,21 +314,13 @@ function App() {
         console.log(`Ошибка: ${err}`);
         localStorage.removeItem("movies");
       });
-  }, [currentUser]);
+  }, [loggedIn]);
 
   useEffect(() =>
   {
     const savedMovies = JSON.parse(localStorage.getItem('sortedMovies'))
     if(savedMovies) {
       setSortedMovies(savedMovies);
-    }
-  }, [])
-
-  useEffect(() =>
-  {
-    const userMovies = JSON.parse(localStorage.getItem('userMovies'))
-    if(userMovies) {
-      setUserMovies(userMovies);
     }
   }, [])
 
