@@ -4,10 +4,10 @@ import icon from "../../images/logo.svg";
 import { Link, useLocation } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
 
-function Header({ bgColor, textColor }) {
+function Header({ bgColor, textColor, loggedIn}) {
   const jwt = localStorage.getItem("jwt");
   const { pathname } = useLocation();
-  const isLoggedOrigin = pathname === "/" && !jwt;
+  const isLoggedOrigin = pathname === "/" && !loggedIn;
   const isMovies = jwt;
   const text = `${isLoggedOrigin ? "Регистрация" : "Аккаунт"}`;
   const [activeBurger, setActiveBurger] = React.useState(false);

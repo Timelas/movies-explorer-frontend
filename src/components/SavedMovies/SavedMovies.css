@@ -2,4 +2,16 @@
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
+  min-height: 99vh;
+  margin: 0 auto;
+  justify-content: space-between;
+}
+
+.movies-message {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  color: #EE3465;
+  text-align: center;
 }

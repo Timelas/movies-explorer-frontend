@@ -17,14 +17,11 @@ import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import { MAX_SHORT_MOVIE_DORATION } from "../../utils/config";
 
 function App() {
-
   const [registrationError, setRegistrationError] = useState(false);
   const [loginError, setLoginError] = useState(false);
-  // const [isLogin, setIsLogin] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [profileError, setProfileError] = useState(false);
   const [isEditProfile, setIsEditProfile] = useState(false);
-
   const [movies, setMovies] = useState([]);
   const [userMovies, setUserMovies] = React.useState([]);
   const [sortedMovies, setSortedMovies] = useState([]);
@@ -45,56 +42,36 @@ function App() {
           if (res) {
             setLoggedIn(true);
             getCurrentUser();
-            setCurrentUser(res);
+            setCurrentUser(res.data);
             history.push(path);
           }
         })
         .catch((err) => {
           console.log(`Переданный токен некорректен: ${err}`);
+          setLoggedIn(false);
           localStorage.removeItem("jwt");
-          history.push("/signup");
+          history.push("/signin");
         });
     }
     // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // function isLoggedCheck() {
-  //   const jwt = localStorage.getItem("jwt");
-  //   if (jwt) {
-  //     mainApi
-  //       .getUser()
-  //       .then((userInfo) => {
-  //         if (userInfo) {
-  //           setCurrentUser(userInfo.data);
-  //           setIsLogin(true);
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.log(err.message);
-  //         setIsLogin(false);
-  //         history.push("/signin");
-  //       });
-  //   }
-  // }
+  React.useEffect(() => {
+    if (loggedIn) {
+      mainApi
+        .getUser()
+        .then((userInfo) => {
+          if (userInfo) {
+            setCurrentUser(userInfo.data);
 
-  // React.useEffect(() => {
-  //   isLoggedCheck();
-  // }, []);
-
-  // React.useEffect(() => {
-  //   if (isLogin) {
-  //     mainApi.getUser()
-  //       .then((userInfo) => {
-  //         if (userInfo) {
-  //           setCurrentUser(userInfo.data);
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  // }, [isLogin]);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [loggedIn]);
 
   function handleRegister(name, email, password) {
     mainApi
@@ -105,22 +82,21 @@ function App() {
           handleLogin(email, password);
           setLoggedIn(true);
           setCurrentUser(data);
+          setMoviesMessage("Введите слово для поиска");
           history.push("/signin");
         }
       })
       .catch((err) => {
         if (err === 409) {
-          setRegistrationError(true);
           setMessage("Пользователь с таким email уже существует");
         } else {
-          setRegistrationError(true);
           setMessage("При регистрации пользователя произошла ошибка");
         }
+        setRegistrationError(true);
       });
   }
 
-
-  const handleLogin = (email, password) => {
+  function handleLogin (email, password) {
     mainApi
       .login(email, password)
       .then((data) => {
@@ -128,11 +104,12 @@ function App() {
           setMessage("Что-то пошло не так");
           return false;
         } if (data) {
-          localStorage.setItem("jwt", data.token);
+          localStorage.setItem("jwt", data);
           setMessage("");
+          setLoggedIn(true);
+          getCurrentUser();
           history.push("/movies");
-          setMessage("Что-то пошло не так");
-          return false;
+          return loggedIn;
         }
       })
       .catch((err) => {
@@ -167,7 +144,8 @@ function App() {
       .setUser(name, email)
       .then((info) => {
         setCurrentUser(info);
-        setMessage("Данные профиля успешно обновлены");
+        setMessage("Данные профиля обновлены");
+        setIsEditProfile(true);
         setTimeout(() => {
           setIsEditProfile(false);
         }, 3000);
@@ -190,7 +168,7 @@ function App() {
       (item) => key.test(item.nameRU) || key.test(item.nameEN)
     );
     if (findedMovies.length === 0) {
-      setMoviesMessage("Фильмы отсуствуют");
+      setMoviesMessage("Таких фильмов в подборке нет");
     } else {
       setMoviesMessage("");
       const checkedLikes = findedMovies.map((movie) => {
@@ -214,9 +192,8 @@ function App() {
   }
 
   function handleLikeClick(movie) {
-    const jwt = localStorage.getItem("jwt");
     mainApi
-      .addMovie(movie, jwt)
+      .addMovie(movie)
       .then((newMovie) => {
         if (!newMovie) {
           throw new Error("При добавлении фильма произошла ошибка");
@@ -234,11 +211,10 @@ function App() {
   }
 
 	function handleDislikeClick(movie) {
-		const jwt = localStorage.getItem("jwt");
     const movieId = movie.id || movie.movieId;
     const selectedMovie = userMovies.find((item) => item.movieId === movieId);
     mainApi
-      .deleteMovie(selectedMovie._id, jwt)
+      .removeMovie(selectedMovie._id)
       .then((deletedMovie) => {
         if (!deletedMovie) {
           throw new Error("При удалении фильма произошла ошибка");
@@ -282,17 +258,17 @@ function App() {
 
 	function checkSavedMovie(movie) {
     return (movie.isSaved = userMovies.some(
-      (userMovie) => userMovie.movieId === movie.id
+      (userMovie) =>
+     userMovie.movieId === movie.id
     ));
   }
 
   function getCurrentUser() {
-    const jwt = localStorage.getItem("jwt");
     mainApi
-      .getUserData(jwt)
+      .getUser()
       .then((userData) => {
         if (userData) {
-          setCurrentUser(userData);
+          setCurrentUser(userData.data);
           localStorage.setItem("currentUser", JSON.stringify(userData));
         }
       })
@@ -306,7 +282,7 @@ function App() {
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
     if (jwt !== null) {
-      Promise.all([mainApi.getUserData(jwt), mainApi.getUserMovies(jwt)])
+      Promise.all([mainApi.getUser(), mainApi.getSavedMovies()])
         .then(([userData, savedMovies]) => {
           localStorage.setItem("currentUser", JSON.stringify(userData));
           setCurrentUser(userData);
@@ -347,7 +323,7 @@ function App() {
       <Switch>
 
         <Route path='/' exact>
-            <Header bgColor="green" textColor="white" isLogin={loggedIn} />
+            <Header bgColor="green" textColor="white" loggedIn={loggedIn} />
             <Main />
             <Footer />
         </Route>
@@ -356,7 +332,7 @@ function App() {
             path='/movies'
             component={Movies}
             movies={filterShortMovies(sortedMovies)}
-            onGetMovies={handleGetSavedMovies}
+            onGetMovies={handleGetMovies}
             loggedIn={loggedIn}
             onAddMovie={handleLikeChange}
             onFilter={handleCheckBox}
@@ -370,11 +346,10 @@ function App() {
           <ProtectedRoute
             path='/saved-movies'
             component={SavedMovies}
-            isLogin={loggedIn}
             currentUser={currentUser}
             movies={filterShortMovies(userMovies)}
             onGetMovies={handleGetSavedMovies}
-            // loggedIn={loggedIn}
+            loggedIn={loggedIn}
             onDelete={handleMovieDeleteButton}
             isShortMovie={shortMovies}
             onFilter={handleCheckBox}
@@ -385,7 +360,7 @@ function App() {
 
           <ProtectedRoute
             path='/profile'
-            isLogin={loggedIn}
+            loggedIn={loggedIn}
             currentUser={currentUser}
             isEditProfile={isEditProfile}
             profileError={profileError}

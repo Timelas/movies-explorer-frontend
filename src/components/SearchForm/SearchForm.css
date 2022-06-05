@@ -4,25 +4,43 @@
   max-width: 1280px;
 	padding: 0;
   background-color: #202020;
+  padding: 0 70px 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.filter-movies {
+  display: flex;
+  position: relative;
 }
 
 .search__container {
-  padding: 80px 70px 10px;
+  padding: 80px 0 10px;
   margin: 0;
   background-color: #202020;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  max-height: 48px;
 }
 
 .search__form {
   display: flex;
   justify-content: space-between;
-  margin: 0 auto 31px;
+  margin: 0 0 31px;
+  width: 100%;
 }
 
-.search__block {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  align-items: center;
+.item-error {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  color: #EE3465;
+  text-align: center;
 }
 
 .search__input {
@@ -40,6 +58,7 @@
   line-height: 18px;
   color: #8B8B8B;
   outline: none;
+  z-index: 3;
 }
 
 .search__input:focus {
@@ -80,16 +99,24 @@
     margin: 0 0 40px 0;
   }
 
+  .search {
+    padding: 0 30px;
+  }
+
   .search__container {
-    padding: 80px 30px 10px;
+    padding: 80px 0 10px;
     margin: 0;
     background-color: #202020;
   }
 }
 
 @media screen and (max-width: 450px) {
+  .search {
+    padding: 14px;
+  }
+
   .search__container {
-    padding: 81px 14px 10px;
+    padding: 81px 0 10px;
   }
 
   .search__form {

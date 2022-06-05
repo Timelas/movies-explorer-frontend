@@ -1,5 +1,5 @@
 import React from "react";
-import "../FilterMovies/FilterMovies.css";
+import "./FilterMovies.css";
 
 function FilterMovies(props) {
   return (
@@ -8,9 +8,6 @@ function FilterMovies(props) {
         <input
           type="checkbox"
           className="filter-checkbox__input"
-          // onClick={() => {
-          //   setIsShortFilms(!isShortFilms);
-          // }}
           onChange={props.onFilter}
           checked={props.isShortMovie}
           name="short-movies"
@@ -18,7 +15,7 @@ function FilterMovies(props) {
         />
         <span className="filter-checkbox__round" />
       </label>
-      <p className="filter-checkbox__text">{props.filterText}</p>
+      <p className="filter-checkbox__text">Короткометражки</p>
     </div>
   );
 }

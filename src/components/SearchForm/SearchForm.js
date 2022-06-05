@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import './SearchForm.css';
-// import FilterMovies from "../FilterMovies/FilterMovies";
+import FilterMovies from "../FilterMovies/FilterMovies";
 
 function SearchForm(props) {
   const [findedMovie, setFindedMovie] = useState("");
@@ -10,7 +10,7 @@ function SearchForm(props) {
   function handleSearchMovie(e) {
     setFindedMovie(e.target.value);
     if (e.target.value.length === 0) {
-      setError("Нужно ввести слово для поиска");
+      setError("Введите слово для поиска");
     } else {
       setError("");
     }
@@ -19,7 +19,6 @@ function SearchForm(props) {
   function handleSubmit(e) {
     e.preventDefault();
     setError("");
-    console.log(props.onGetMovies)
     props.onGetMovies(findedMovie);
     setFindedMovie("");
   }
@@ -36,7 +35,6 @@ function SearchForm(props) {
     <section className='search'>
       <div className='search__container'>
        <form className='search__form' onSubmit={handleSubmit} noValidate>
-          <div className='search__block'>
             <input className='search__input'
                 type="text"
                 name="search"
@@ -46,20 +44,21 @@ function SearchForm(props) {
                 value={findedMovie}
                 onChange={handleSearchMovie}
                 required
-            // onClick={() => setInputError("")}
             />
-            <button className='search__button' type='submit'
-            onClick={handleSubmit}
-            disabled={!formValid}>Найти</button>
-          </div>
         </form>
-        {/* <FilterMovies
-          filterText="Короткометражки"
-          isShortFilms={isShortFilms}
-          setIsShortFilms={setIsShortFilms}
-        /> */}
-        <div className='search__line'></div>
+        <button className='search__button' type='submit'
+            onClick={handleSubmit}
+            disabled={!formValid}
+            >Найти</button>
       </div>
+      <div className="item-error">{error}</div>
+      <div className="filter-movies">
+        <FilterMovies
+          onFilter={props.onFilter}
+          isShortMovie={props.isShortMovie}
+        />
+      </div>
+      <div className='search__line'></div>
     </section>
   );
 };

@@ -1,18 +1,14 @@
+import { MAIN_API } from "../utils/config";
+
 class MainApi {
   constructor({ adress, headers }) {
       this._adress = adress;
       this._headers = headers;
   }
 
-  getUser(token) {
+  getUser() {
       return fetch(`${this._adress}/api/users/me`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
+          headers: this._headers,})
           .then(res => this._checkStatus(res))
   }
 
@@ -48,10 +44,10 @@ class MainApi {
       })
       .then(res => this._checkStatus(res))
       .then(data => {
-          if (data.token) {
+          if(data.token) {
               localStorage.setItem('jwt', data.token);
               this.updateHeaders();
-              return data;
+              return data.token;
           } return Promise.reject(new Error(`Ошибка: ${data.status}`))
       })
   }
@@ -80,18 +76,17 @@ class MainApi {
           method: 'POST',
           headers: this._headers,
           body: JSON.stringify({
-              country:  movie.country,
-              director: movie.director,
-              duration: movie.duration,
-              year: movie.year,
-              description: movie.description,
-              image: `https://api.nomoreparties.co${movie.image.url}`,
-              trailer: movie.trailerLink,
-              movieId: movie.id,
-              nameRU: movie.nameRU,
-              nameEN: movie.nameEN,
-              thumbnail: `https://api.nomoreparties.co${movie.image.url}`
-          })
+            country: movie.country,
+            director: movie.director,
+            duration: movie.duration,
+            year: movie.year,
+            description: movie.description,
+            image: movie.image,
+            trailer: movie.trailer,
+            thumbnail: movie.thumbnail,
+            movieId: movie.movieId,
+            nameRU: movie.nameRU,
+            nameEN: movie.nameEN,          })
       }).then(res => this._checkStatus(res))
   }
 
@@ -115,10 +110,10 @@ class MainApi {
 
 const mainApi = new MainApi({
   //adress: 'http://localhost:3000',
-  adress: 'https://api.moviessave.nomoredomains.work',
+  adress: MAIN_API,
   headers: {
     'Content-Type': 'application/json',
-    // 'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
   },
   credentials: 'include'
 })

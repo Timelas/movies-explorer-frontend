@@ -4,7 +4,10 @@
   align-items: center;
   column-gap: 12px;
   height: 40px;
-  margin: 0 0 40px;
+  margin: 0;
+  padding: 89px 0 50px;
+  box-sizing: border-box;
+  position: relative;
 }
 
 .filter-checkbox__label {

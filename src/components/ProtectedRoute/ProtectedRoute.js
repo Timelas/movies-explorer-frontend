@@ -5,10 +5,12 @@ import { Route, Redirect } from 'react-router-dom';
 const ProtectedRoute = ({ component: Component, ...props }) => {
 
   return (
-    <Route {...props} render={
-      props => <Component {...props} {...props} />
-    } />
-  )
+    <Route>
+      {() =>
+        (props.loggedIn ? <Component {...props} /> : <Redirect to='/' />)
+      }
+    </Route>
+  );
 };
 
 export default ProtectedRoute;

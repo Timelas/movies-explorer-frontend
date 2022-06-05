@@ -63,15 +63,40 @@
 	cursor: inherit;
 }
 
-.card__button {
-  width: 12px;
-  height: 14px;
-  border: none;
-  cursor: pointer;
+.card__like {
+  background: url(../../images/saved-film_button.svg) no-repeat center;
+  width: 14px;
+  height: 12px;
   padding: 0;
   background-color: #222222;
   transition: opacity 0.3s ease;
   object-fit: contain;
+  cursor: pointer;
+}
+
+.card__like:hover {
+  opacity: 0.8;
+}
+
+.card__like_active {
+  background: url(../../images/unsaved-film_button.png) no-repeat center;
+  width: 14px;
+  height: 12px;
+}
+
+.card__delete {
+  background: url(../../images/delete-film_button.svg) no-repeat center;
+  width: 14px;
+  height: 12px;
+  padding: 0;
+  background-color: #222222;
+  transition: opacity 0.3s ease;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.card__delete:hover {
+  opacity: 0.8;
 }
 
 .card__button:hover {
