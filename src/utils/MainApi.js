@@ -109,8 +109,8 @@ class MainApi {
 }
 
 const mainApi = new MainApi({
-  //adress: 'http://localhost:3000',
-  adress: MAIN_API,
+  adress: 'http://localhost:3001',
+  // adress: MAIN_API,
   headers: {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${localStorage.getItem('jwt')}`

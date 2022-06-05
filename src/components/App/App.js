@@ -42,7 +42,7 @@ function App() {
           if (res) {
             setLoggedIn(true);
             getCurrentUser();
-            setCurrentUser(res.data);
+            setCurrentUser(res);
             history.push(path);
           }
         })
@@ -57,14 +57,13 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (loggedIn) {
       mainApi
         .getUser()
         .then((userInfo) => {
           if (userInfo) {
-            setCurrentUser(userInfo.data);
-
+            setCurrentUser(userInfo);
           }
         })
         .catch((err) => {
@@ -201,9 +200,10 @@ function App() {
         } else {
           localStorage.setItem(
             "userMovies",
-            JSON.stringify((newMovie = [newMovie.movie, ...userMovies]))
+            JSON.stringify((newMovie = [newMovie, ...userMovies]))
           );
           setUserMovies(newMovie);
+          console.log(newMovie)
         }
       })
       .catch((err) => {
@@ -269,8 +269,8 @@ function App() {
       .getUser()
       .then((userData) => {
         if (userData) {
-          setCurrentUser(userData.data);
-          localStorage.setItem("currentUser", JSON.stringify(userData));
+          setCurrentUser(userData);
+          localStorage.setItem("currentUser", JSON.stringify(userData.data));
         }
       })
       .catch((err) => {
@@ -317,6 +317,22 @@ function App() {
         localStorage.removeItem("movies");
       });
   }, [currentUser]);
+
+  useEffect(() =>
+  {
+    const savedMovies = JSON.parse(localStorage.getItem('sortedMovies'))
+    if(savedMovies) {
+      setSortedMovies(savedMovies);
+    }
+  }, [])
+
+  useEffect(() =>
+  {
+    const userMovies = JSON.parse(localStorage.getItem('userMovies'))
+    if(userMovies) {
+      setUserMovies(userMovies);
+    }
+  }, [])
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
