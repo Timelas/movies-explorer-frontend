@@ -5,6 +5,8 @@ import { baseUrl } from "../../utils/config";
 function MoviesCard(props) {
   const isLiked = !props.isSavedMovies && props.likedMovies(props.movie);
 
+console.log(props);
+
   function handleLikeClick() {
     props.onAddMovie({
       country: props.movie.country,

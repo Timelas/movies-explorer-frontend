@@ -184,6 +184,7 @@ function App() {
 
 	function handleLikeChange(movie) {
     const clickedMovie = movie.isSaved;
+    console.log(clickedMovie)
     if (clickedMovie) {
       handleDislikeClick(movie);
     } else {

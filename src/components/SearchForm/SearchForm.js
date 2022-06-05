@@ -9,18 +9,20 @@ function SearchForm(props) {
 
   function handleSearchMovie(e) {
     setFindedMovie(e.target.value);
-    if (e.target.value.length === 0) {
-      setError("Введите слово для поиска");
-    } else {
-      setError("");
-    }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    setError("");
-    props.onGetMovies(findedMovie);
-    setFindedMovie("");
+    if (findedMovie === "") {
+      setError("Введите слово для поиска");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    } else {
+      setError("");
+      props.onGetMovies(findedMovie);
+      setFindedMovie("");
+    }
   }
 
   React.useEffect(() => {
@@ -48,7 +50,6 @@ function SearchForm(props) {
         </form>
         <button className='search__button' type='submit'
             onClick={handleSubmit}
-            disabled={!formValid}
             >Найти</button>
       </div>
       <div className="item-error">{error}</div>
