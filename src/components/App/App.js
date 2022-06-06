@@ -29,6 +29,7 @@ function App() {
   const [shortMovies, setShortMovies] = useState(false);
   const [message, setMessage] = useState("");
   const [moviesMessage, setMoviesMessage] = useState("");
+  const [moviesSavedMessage, setMoviesSavedMessage] = useState("");
   const [initialValue, setInitialValue] = useState("");
 
   const history = useHistory();
@@ -81,7 +82,6 @@ function App() {
           handleLogin(email, password);
           setLoggedIn(true);
           setCurrentUser(data);
-          setMoviesMessage("Введите слово для поиска");
           history.push("/signin");
         }
       })
@@ -107,7 +107,6 @@ function App() {
           setMessage("");
           setLoggedIn(true);
           getCurrentUser();
-          setMoviesMessage("Введите слово для поиска");
           history.push("/movies");
           return loggedIn;
         }
@@ -132,12 +131,14 @@ function App() {
     localStorage.removeItem("sortedMovies");
     localStorage.removeItem("currentUser");
     localStorage.removeItem("filter");
+    localStorage.removeItem("search");
     setShortMovies(false);
     setUserMovies([]);
     setSortedMovies([]);
     setCurrentUser({});
     setLoggedIn(false);
     setMessage("");
+    setInitialValue("");
     history.push("/");
   }
 
@@ -165,23 +166,42 @@ function App() {
 
   function handleGetMovies(keyword) {
     localStorage.setItem("search", keyword);
-    setMoviesMessage("");
-    const key = new RegExp(keyword, "gi");
-    const findedMovies = movies.filter(
-      (item) => key.test(item.nameRU) || key.test(item.nameEN)
-    );
-    if (findedMovies.length === 0) {
-      setMoviesMessage("Таких фильмов в подборке нет");
-    } else {
+    // if (location.pathname === "/saved-movies") {
       setMoviesMessage("");
-      const checkedLikes = findedMovies.map((movie) => {
-        movie.isSaved = userMovies.some(
-          (userMovie) => userMovie.movieId === movie.id
-        );
-        return movie;
-      });
-      setSortedMovies(checkedLikes);
-      localStorage.setItem("sortedMovies", JSON.stringify(checkedLikes));
+      const key = new RegExp(keyword, "gi");
+      const findedMovies = movies.filter(
+        (item) => key.test(item.nameRU) || key.test(item.nameEN)
+      );
+      if (findedMovies.length === 0) {
+        setMoviesMessage("Таких фильмов в подборке нет");
+      } else {
+        setMoviesMessage("");
+        const checkedLikes = findedMovies.map((movie) => {
+          movie.isSaved = userMovies.some(
+            (userMovie) => userMovie.movieId === movie.id
+          );
+          return movie;
+        });
+        setSortedMovies(checkedLikes);
+        localStorage.setItem("sortedMovies", JSON.stringify(checkedLikes));
+    // }
+    // setMoviesMessage("");
+    // const key = new RegExp(keyword, "gi");
+    // const findedMovies = movies.filter(
+    //   (item) => key.test(item.nameRU) || key.test(item.nameEN)
+    // );
+    // if (findedMovies.length === 0) {
+    //   setMoviesMessage("Таких фильмов в подборке нет");
+    // } else {
+    //   setMoviesMessage("");
+    //   const checkedLikes = findedMovies.map((movie) => {
+    //     movie.isSaved = userMovies.some(
+    //       (userMovie) => userMovie.movieId === movie.id
+    //     );
+    //     return movie;
+    //   });
+    //   setSortedMovies(checkedLikes);
+    //   localStorage.setItem("sortedMovies", JSON.stringify(checkedLikes));
     }
 	}
 
@@ -370,7 +390,7 @@ function App() {
             onAddMovie={handleLikeChange}
             onFilter={handleCheckBox}
             isShortMovie={shortMovies}
-            message={moviesMessage}
+            message={moviesSavedMessage}
             savedMovies={userMovies}
             onSignOut={handleLogout}
             likedMovies={checkSavedMovie}
