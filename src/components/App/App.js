@@ -105,6 +105,7 @@ function App() {
           setMessage("");
           setLoggedIn(true);
           getCurrentUser();
+          setMoviesMessage("Введите слово для поиска");
           history.push("/movies");
           return loggedIn;
         }
@@ -128,6 +129,8 @@ function App() {
     localStorage.removeItem("movies");
     localStorage.removeItem("sortedMovies");
     localStorage.removeItem("currentUser");
+    localStorage.removeItem("filter");
+    setShortMovies(false);
     setUserMovies([]);
     setSortedMovies([]);
     setCurrentUser({});
@@ -181,7 +184,6 @@ function App() {
 
 	function handleLikeChange(movie) {
     const clickedMovie = movie.isSaved;
-    console.log(clickedMovie)
     if (clickedMovie) {
       handleDislikeClick(movie);
     } else {
@@ -201,7 +203,6 @@ function App() {
             JSON.stringify((newMovie = [newMovie, ...userMovies]))
           );
           setUserMovies(newMovie);
-          console.log(newMovie)
         }
       })
       .catch((err) => {
@@ -244,6 +245,9 @@ function App() {
   }
 
   function handleCheckBox() {
+    if (location.pathname === "/movies") {
+      localStorage.setItem("filter", !shortMovies);
+    }
     setShortMovies(!shortMovies);
   }
 
@@ -318,19 +322,22 @@ function App() {
 
   useEffect(() =>
   {
-    const savedMovies = JSON.parse(localStorage.getItem('sortedMovies'))
-    if(savedMovies) {
+    const savedMovies = JSON.parse(localStorage.getItem('sortedMovies'));
+    const fiterMovies = JSON.parse(localStorage.getItem('filter'));
+    if (location.pathname === "/movies") {
+      setShortMovies(fiterMovies);
       setSortedMovies(savedMovies);
     }
-  }, [])
+  }, [location.pathname])
 
   useEffect(() =>
   {
-    const likesMovies = JSON.parse(localStorage.getItem('userMovies'))
-    if(likesMovies) {
+    const likesMovies = JSON.parse(localStorage.getItem('userMovies'));
+    if (location.pathname === "/saved-movies") {
+      setShortMovies(false);
       setUserMovies(likesMovies);
     }
-  }, [])
+  }, [location.pathname])
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -366,7 +373,7 @@ function App() {
             onGetMovies={handleGetSavedMovies}
             loggedIn={loggedIn}
             onDelete={handleMovieDeleteButton}
-            isShortMovie={shortMovies}
+            // isShortMovie={shortMovies}
             onFilter={handleCheckBox}
             message={moviesMessage}
             isSavedMovies={true}
