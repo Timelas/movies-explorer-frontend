@@ -9,9 +9,11 @@ function validation(name, value) {
   }
 
   if(name === 'password') {
-      if(!value) {
+      if (value.length === 0) {
           errors =({[name]: 'Поле не может быть пустым'})
-      }
+      } if (value.length < 8) {
+        errors = {[name]: 'Пароль слишком короткий'}
+    }
   }
 
   if(name === 'name') {

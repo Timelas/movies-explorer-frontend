@@ -12,6 +12,7 @@ function Movies(props) {
     <section className="movies">
       <Header bgColor="gray" textColor="white" loggedIn={props.loggedIn} />
       <SearchForm
+        initialValue={props.initialValue}
         onGetMovies={props.onGetMovies}
         onFilter={props.onFilter}
         isShortMovie={props.isShortMovie} />

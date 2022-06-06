@@ -3,7 +3,7 @@ import './SearchForm.css';
 import FilterMovies from "../FilterMovies/FilterMovies";
 
 function SearchForm(props) {
-  const [findedMovie, setFindedMovie] = useState("");
+  const [findedMovie, setFindedMovie] = useState(props.initialValue || "");
   const [error, setError] = React.useState("");
   const [formValid, setFormValid] = React.useState(false);
 
@@ -21,9 +21,12 @@ function SearchForm(props) {
     } else {
       setError("");
       props.onGetMovies(findedMovie);
-      setFindedMovie("");
     }
   }
+
+  React.useEffect(() => {
+    localStorage.getItem("search");
+  }, [])
 
   React.useEffect(() => {
     if (findedMovie && !error) {

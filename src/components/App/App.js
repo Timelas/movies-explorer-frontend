@@ -29,6 +29,8 @@ function App() {
   const [shortMovies, setShortMovies] = useState(false);
   const [message, setMessage] = useState("");
   const [moviesMessage, setMoviesMessage] = useState("");
+  const [initialValue, setInitialValue] = useState("");
+
   const history = useHistory();
   let location = useLocation();
 
@@ -146,13 +148,13 @@ function App() {
         setCurrentUser(info);
         setMessage("Данные профиля обновлены");
         setIsEditProfile(true);
+        setProfileError(false);
         setTimeout(() => {
           setIsEditProfile(false);
         }, 3000);
       })
       .catch((err) => {
-        console.log(`Ошибка: ${err}`);
-        if (err.status === 409) {
+        if (err === 'Ошибка 409') {
           setMessage("Пользователь с таким email уже существует");
         } else {
           setMessage("При изменении данных профиля произошла ошибка");
@@ -162,6 +164,7 @@ function App() {
   }
 
   function handleGetMovies(keyword) {
+    localStorage.setItem("search", keyword);
     setMoviesMessage("");
     const key = new RegExp(keyword, "gi");
     const findedMovies = movies.filter(
@@ -308,7 +311,8 @@ function App() {
   }, [userMovies]);
 
   useEffect(() => {
-    moviesApi
+    if(loggedIn) {
+      moviesApi
       .getMovies()
       .then((allMovies) => {
         setMovies(allMovies);
@@ -318,18 +322,20 @@ function App() {
         console.log(`Ошибка: ${err}`);
         localStorage.removeItem("movies");
       });
+    }
   }, [loggedIn]);
 
   useEffect(() =>
   {
     const savedMovies = JSON.parse(localStorage.getItem('sortedMovies'));
     const fiterMovies = JSON.parse(localStorage.getItem('filter'));
+    const initialValue = localStorage.getItem("search");
     if (location.pathname === "/movies") {
       if (savedMovies) {
         setSortedMovies(savedMovies);
-      } if (fiterMovies) {
-        setShortMovies(fiterMovies);
       }
+      setInitialValue(initialValue);
+      setShortMovies(!!fiterMovies);
     }
   }, [location.pathname])
 
@@ -339,7 +345,6 @@ function App() {
     if (location.pathname === "/saved-movies") {
       if (likesMovies) {
         setUserMovies(likesMovies);
-        setShortMovies(false);
       }
       setShortMovies(false);
     }
@@ -369,6 +374,7 @@ function App() {
             savedMovies={userMovies}
             onSignOut={handleLogout}
             likedMovies={checkSavedMovie}
+            initialValue={initialValue}
           />
 
           <ProtectedRoute
@@ -384,6 +390,7 @@ function App() {
             message={moviesMessage}
             isSavedMovies={true}
             onSignOut={handleLogout}
+            initialValue={initialValue}
           />
 
           <ProtectedRoute
