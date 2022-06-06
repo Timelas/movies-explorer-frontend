@@ -325,8 +325,11 @@ function App() {
     const savedMovies = JSON.parse(localStorage.getItem('sortedMovies'));
     const fiterMovies = JSON.parse(localStorage.getItem('filter'));
     if (location.pathname === "/movies") {
-      setShortMovies(fiterMovies);
-      setSortedMovies(savedMovies);
+      if (savedMovies) {
+        setSortedMovies(savedMovies);
+      } if (fiterMovies) {
+        setShortMovies(fiterMovies);
+      }
     }
   }, [location.pathname])
 
@@ -334,8 +337,11 @@ function App() {
   {
     const likesMovies = JSON.parse(localStorage.getItem('userMovies'));
     if (location.pathname === "/saved-movies") {
+      if (likesMovies) {
+        setUserMovies(likesMovies);
+        setShortMovies(false);
+      }
       setShortMovies(false);
-      setUserMovies(likesMovies);
     }
   }, [location.pathname])
 
@@ -373,7 +379,7 @@ function App() {
             onGetMovies={handleGetSavedMovies}
             loggedIn={loggedIn}
             onDelete={handleMovieDeleteButton}
-            // isShortMovie={shortMovies}
+            isShortMovie={shortMovies}
             onFilter={handleCheckBox}
             message={moviesMessage}
             isSavedMovies={true}
