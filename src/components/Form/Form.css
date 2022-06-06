@@ -1,43 +1,4 @@
-.register {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-  background-color: #202020;
-  padding: 70px 0;
-  min-height: 100vh;
-  box-sizing: border-box;
-}
-
-.register__block {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	max-width: 396px;
-	width: 100%;
-}
-
-.register__message {
-  color: #ee3465;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 17px;
-  margin: auto;
-	margin-bottom: 10px;
-}
-
-.register__heading {
-  font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 29px;
-  color: #fff;
-	margin: 40px 0 40px;
-	padding: 0;
-	box-sizing: border-box;
-}
-
-.register__form {
+.form {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
@@ -47,7 +8,7 @@
 	max-width: 396px;
 }
 
-.register__input {
+.form__input {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -55,11 +16,11 @@
   padding: 0;
 }
 
-.register__input:last-of-type {
+.form__input:last-of-type {
   margin: 0;
 }
 
-.register__input-name {
+.form__input-name {
   font-style: normal;
   font-weight: 400;
   font-size: 10px;
@@ -68,7 +29,7 @@
 	margin: 0 0 5px;
 }
 
-.register__field {
+.form__field {
 	background: #202020;
 	width: 100%;
 	height: 28px;
@@ -84,15 +45,15 @@
   color: #fff;
 }
 
-.register__field_password {
+.form__field_password {
 	color: #ee3465;
 }
 
-.register__form_button {
+.form__button {
 	width: 100%;
 	max-width: 396px;
 	height: 45px;
-	margin: 110px 0 16px;
+	margin: 197px 0 16px;
 	align-items: center;
 	border: none;
 	box-sizing: border-box;
@@ -106,20 +67,19 @@
   color: #fff;
 }
 
-
-.register__form_button:hover {
+.form__button:hover {
 	opacity: 0.8;
 	cursor: pointer;
 }
 
-.register__signin {
+.login__signin {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	margin: 0 auto;
 }
 
-.register__input_error {
+.form__input-error {
 	font-weight: 400;
 	font-size: 10px;
 	line-height: 12.1px;
@@ -130,7 +90,7 @@
 	pointer-events: none;
 }
 
-.register__link-title {
+.form__promt {
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -138,9 +98,10 @@
   text-align: center;
   color: #8B8B8B;
 	margin: 0 6px 0 0;
+  align-self: center;
 }
 
-.register__login-link {
+.form__link {
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
@@ -150,41 +111,29 @@
 	text-decoration: none;
 }
 
-.register__login-link:hover {
+.form__link:hover {
 	opacity: 0.7;
 }
 
 @media screen and (max-width: 450px) {
-  .register{
-    padding: 56px 30px 30px;
-  }
-
-	.register__block {
-	  align-items: center;
-	}
-
-	.register__heading {
-		margin: 50px auto 80px;
-	}
-
-	.register__form {
+	.form {
 		width: 100%;
     margin: 0;
 	}
 
-	.register__form-button {
+	.form__button {
 		margin: 198px 0 14px;
 		font-size: 12px;
 		line-height: 15px;
 	}
 
-	.register__link_title {
+	.form__promt {
 		margin: 0 7px 0 0;
 		font-size: 12px;
 		line-height: 15px;
 	}
 
-	.register__login-link {
+	.form__link {
 		font-size: 12px;
 		line-height: 15px;
 	}

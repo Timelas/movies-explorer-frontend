@@ -1,29 +1,86 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './Profile.css';
 import Header from '../Header/Header';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
+import CallbackValidation from '../../hooks/Validity';
 
-function Profile() {
+function Profile({
+  handleLogout,
+  editProfile,
+  loggedIn,
+  profileError,
+  isEditProfile,
+}) {
+  const currentUser = React.useContext(CurrentUserContext);
+  const validation = CallbackValidation();
+  const { name, email } = validation.values;
+
+  React.useEffect(() => {
+    validation.setValues({ email: currentUser.email, name: currentUser.name });
+
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser.email, currentUser.name]);
+
+  const submitProfile = (e) => {
+    e.preventDefault();
+    editProfile(name, email);
+  };
+
   return (
     <section className='profile'>
-      <Header />
-      <h2 className='profile__heading'>Привет, Виталий!</h2>
+      <Header bgColor="grey" textColor="white" loggedIn={loggedIn}/>
+      <h2 className='profile__heading'>Привет, {currentUser && currentUser.name}</h2>
       <div className='profile__content'>
-        <form className='profile__form'>
-          <div className='profile__input-box'>
-            <span className='profile__input'>Имя</span>
-            <input className='profile__field' placeholder='Виталий' name='name' type='text' minLength='2' maxLength='40' required></input>
-          </div>
-          <div className='profile__input-box'>
-            <span className='profile__input'>E-mail</span>
-            <input className='profile__field' placeholder='pochta@yandex.ru' name='email' type='email' required></input>
-          </div>
-          <button type='submit' className='profile__form-button'>
-            Редактировать
-          </button>
-          <Link to='/' className='profile__link'>
-            Выйти из аккаунта
-          </Link>
+        <form className='profile__form' onSubmit={submitProfile}>
+        <label htmlFor="name" className="profile__input">
+              Имя
+              <input
+                onChange={validation.handleChange}
+                value={name || ""}
+                className="profile__field"
+                name="name"
+                id="name"
+              ></input>
+            </label>
+            <label htmlFor="email" className="profile__input">
+              Почта
+              <input
+                className="profile__field"
+                onChange={validation.handleChange}
+                value={email || ""}
+                name="email"
+                id="email"
+              ></input>
+            </label>
+
+            <p className="profile__form-error">
+              {validation.errors.name || validation.errors.email}
+            </p>
+
+            {profileError && (
+              <p className="profile__form-error">Ошибка обновления данных</p>
+            )}
+
+            {isEditProfile && (
+              <p className="profile__form-edit">Данные успешно обновлены</p>
+            )}
+                        <button
+              className="profile__form-button"
+              type="submit"
+              disabled={
+                (currentUser &&
+                  name === currentUser.name &&
+                  email === currentUser.email) ||
+                !validation.isValid
+              }
+            >
+              Редактировать
+            </button>
+
+            <button className="profile__link" onClick={handleLogout}>
+              Выйти из аккаунта
+            </button>
         </form>
       </div>
     </section>

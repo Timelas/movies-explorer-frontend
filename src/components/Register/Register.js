@@ -1,9 +1,22 @@
 import React from 'react';
 import './Register.css';
 import { Link } from 'react-router-dom';
+import Form from "../Form/Form";
 import logo from '../../images/logo.svg';
+import CallbackValidation  from '../../hooks/Validity';
 
-function Register() {
+function Register({ handleRegister, registrationError }) {
+  const callbackValidation = CallbackValidation();
+  const { email, password, name } = callbackValidation.values;
+  const { values, onFocus, handleChange, isFocused, errors } =
+    callbackValidation;
+
+  const submitHandle = (e) => {
+    e.preventDefault();
+    handleRegister(name, email, password);
+    callbackValidation.resetForm();
+  };
+
   return (
     <section className='register'>
       <div className='register__block'>
@@ -12,32 +25,36 @@ function Register() {
       </Link>
         <h2 className='register__heading'>Добро пожаловать!</h2>
       </div>
-      <form className='register__form'>
-        <div className='register__input'>
-          <span className='register__input-name'>Имя</span>
-          <input className='register__field' name='name' type='text' minLength='2' maxLength='40' required></input>
-          {/* <span className='register__input_error'>Неверно заполнено поле 'Имя'</span> */}
-        </div>
-        <div className='register__input'>
-          <span className='register__input-name'>E-mail</span>
-          <input className='register__field' name='email' type='email' required></input>
-          {/* <span className='register__input_error'>Неверно заполнено поле 'E-mail'</span> */}
-        </div>
-        <div className='register__input'>
-          <span className='register__input-name'>Пароль</span>
-          <input className='register__field register__field_password' name='password' type='password' required minLength='8'></input>
-          <span className='register__input_error'>Неверный пароль</span>
-        </div>
-        <button type='submit' className='register__form_button'>
-          Зарегистрироваться
-        </button>
-        <div className='register__signin'>
-          <p className='register__link-title'>Уже зарегистрированы?</p>
-          <Link to='/signin' className='register__login-link'>
-            Войти
-          </Link>
-        </div>
-      </form>
+      <Form
+          submitText={{
+            buttonText: "Зарегистрироваться",
+            promt: "Уже зарегистрированы?",
+            route: "/signin",
+            linkText: "Войти",
+          }}
+          registrationError={registrationError}
+          submitHandle={submitHandle}
+          validation={callbackValidation}
+          formName="register"
+        >
+          <div className='form__input'>
+          <label htmlFor="name" className="form__input-name">
+            Имя
+          </label>
+          <input
+            id="name"
+            name="name"
+            className="form__field"
+            minLength="2"
+            type="text"
+            required
+            value={values.name || ""}
+            onFocus={onFocus}
+            onChange={handleChange}
+          />
+          <span className="form__input-error">{isFocused && errors.name}</span>
+          </div>
+ </Form>
     </section>
   );
 }

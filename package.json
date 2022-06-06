@@ -16,7 +16,7 @@
   },
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "npm run build & scp -r ./build/* timelas@51.250.81.187:/home/timelas/react-mesto-api-full/frontend",
+    "deploy": "npm run build & scp -r ./build/* timelas@51.250.14.31:/home/timelas/frontend",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

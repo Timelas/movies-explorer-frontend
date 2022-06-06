@@ -1,52 +1,71 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-import './MoviesCard.css';
-import ExampleCard from '../../images/pic1.png';
-import SavedMovieBtn from '../../images/saved-film_button.svg';
-import SaveBtn from '../../images/saved-button.svg';
-import RemoveSavedMovie from '../../images/delete-film_button.svg';
+import React from "react";
+import "./MoviesCard.css";
+import { baseUrl } from "../../utils/config";
 
 function MoviesCard(props) {
-  let SavedMovie;
-  const [isSaved, setIsSaved] = React.useState(false);
-  const { pathname } = useLocation();
-  SavedMovie = pathname === '/saved-movies';
+  const isLiked = !props.isSavedMovies && props.likedMovies(props.movie);
 
-  function handleSave() {
-    setIsSaved(true);
+  function handleLikeClick() {
+    props.onAddMovie({
+      country: props.movie.country,
+      director: props.movie.director,
+      duration: props.movie.duration,
+      year: props.movie.year,
+      description: props.movie.description,
+      image: `${baseUrl}${props.movie.image ? props.movie.image.url : ""}`,
+      trailer: props.movie.trailerLink,
+      thumbnail: `${baseUrl}${
+        props.movie.image.formats.thumbnail
+          ? props.movie.image.formats.thumbnail.url
+          : ""
+      }`,
+      movieId: props.movie.id,
+      nameRU: props.movie.nameRU,
+      nameEN: props.movie.nameEN,
+      isSaved: props.movie.isSaved,
+    });
   }
 
-  function handleRemoveFromSaved() {
-    setIsSaved(false);
+  function handleDeleteClick() {
+    props.onDelete(props.movie);
   }
 
   return (
-    <section className='moviecard'>
-      <div className='moviecard__block'>
-        <img className='moviecard__pic' src={ExampleCard} alt='Кадр из фильма 33 слова о дизайне' />
-        <div className='moviecard__info'>
-          <div>
-            <h3 className='moviecard__title'>33 слова о дизайне</h3>
-            <p className='moviecard__duration'>1ч 47м</p>
-          </div>
-          {SavedMovie ? (
-            <button className='moviecard__button-delete' onClick={handleRemoveFromSaved}><img src={RemoveSavedMovie} alt='кнопка удаления сохраненного фильма'/></button>
-            ) : (
-            <>
-                {isSaved ?
-                  (
-                    <button className='moviecard__button-saved'><img src={SavedMovieBtn} alt='фильм сохранен'/></button>
-                  ) : (
-                    <button className='moviecard__button' onClick={handleSave}><img src={SaveBtn} alt='кнопка сохранения фильма'/></button>
-                  )
-                }
-              </>
-            )
-          }
+    <section className="card">
+      <div className="card__block">
+      <a
+         className="card__box"
+        href={props.trailerLink || props.trailer}
+        target="_blank"
+         rel="noreferrer"
+      >
+        <img src={
+            props.isSavedMovies
+              ? props.movie.image
+              : `${baseUrl}${
+                  props.movie.image ? props.movie.image.url : props.image
+                }`
+          } alt={props.name} className="card__pic" />
+      </a>
+      <div className="card__info">
+        <div>
+          <h3 className="card__title">{props.name || props.movie.nameRU}</h3>
+          <p className="card__duration">{`${Math.floor(
+            (props.duration || props.movie.duration) / 60
+          )}ч ${(props.duration || props.movie.duration) % 60}м`}</p>
         </div>
+        {props.isSavedMovies ? (
+          <div className="card__delete" onClick={handleDeleteClick} />
+        ) : (
+          <div
+            className={`card__like ${isLiked ? "card__like_active" : ""}`}
+            onClick={handleLikeClick}
+          />
+        )}
+      </div>
       </div>
     </section>
   );
-};
+}
 
 export default MoviesCard;
