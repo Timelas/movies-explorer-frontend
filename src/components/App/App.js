@@ -324,6 +324,14 @@ function App() {
     }
   }, [])
 
+  useEffect(() =>
+  {
+    const likesMovies = JSON.parse(localStorage.getItem('userMovies'))
+    if(likesMovies) {
+      setUserMovies(likesMovies);
+    }
+  }, [])
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <>
