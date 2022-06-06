@@ -166,7 +166,7 @@ function App() {
 
   function handleGetMovies(keyword) {
     localStorage.setItem("search", keyword);
-    // if (location.pathname === "/saved-movies") {
+    if (location.pathname === "/saved-movies") {
       setMoviesMessage("");
       const key = new RegExp(keyword, "gi");
       const findedMovies = movies.filter(
@@ -184,24 +184,25 @@ function App() {
         });
         setSortedMovies(checkedLikes);
         localStorage.setItem("sortedMovies", JSON.stringify(checkedLikes));
-    // }
-    // setMoviesMessage("");
-    // const key = new RegExp(keyword, "gi");
-    // const findedMovies = movies.filter(
-    //   (item) => key.test(item.nameRU) || key.test(item.nameEN)
-    // );
-    // if (findedMovies.length === 0) {
-    //   setMoviesMessage("Таких фильмов в подборке нет");
-    // } else {
-    //   setMoviesMessage("");
-    //   const checkedLikes = findedMovies.map((movie) => {
-    //     movie.isSaved = userMovies.some(
-    //       (userMovie) => userMovie.movieId === movie.id
-    //     );
-    //     return movie;
-    //   });
-    //   setSortedMovies(checkedLikes);
-    //   localStorage.setItem("sortedMovies", JSON.stringify(checkedLikes));
+    }
+    } else {
+    setMoviesSavedMessage("");
+    const key = new RegExp(keyword, "gi");
+    const findedMovies = movies.filter(
+      (item) => key.test(item.nameRU) || key.test(item.nameEN)
+    );
+    if (findedMovies.length === 0) {
+      setMoviesSavedMessage("Таких фильмов в подборке нет");
+    } else {
+      setMoviesSavedMessage("");
+      const checkedLikes = findedMovies.map((movie) => {
+        movie.isSaved = userMovies.some(
+          (userMovie) => userMovie.movieId === movie.id
+        );
+        return movie;
+      });
+      setSortedMovies(checkedLikes);
+      localStorage.setItem("sortedMovies", JSON.stringify(checkedLikes));
     }
 	}
 
@@ -254,16 +255,30 @@ function App() {
   }
 
   function handleGetSavedMovies(keyword) {
-    setMoviesMessage("");
-    const key = new RegExp(keyword, "gi");
-    const findedMovies = userMovies.filter(
-      (item) => key.test(item.nameRU) || key.test(item.nameEN)
-    );
-    if (findedMovies.length === 0) {
-      setMoviesMessage("Ничего не найдено");
-    } else {
+    if(location.pathname === "saved-movies") {
       setMoviesMessage("");
-      setUserMovies(findedMovies);
+      const key = new RegExp(keyword, "gi");
+      const findedMovies = userMovies.filter(
+        (item) => key.test(item.nameRU) || key.test(item.nameEN)
+      );
+      if (findedMovies.length === 0) {
+        setMoviesMessage("Ничего не найдено");
+      } else {
+        setMoviesMessage("");
+        setUserMovies(findedMovies);
+      }
+    } else {
+      setMoviesSavedMessage("");
+      const key = new RegExp(keyword, "gi");
+      const findedMovies = userMovies.filter(
+        (item) => key.test(item.nameRU) || key.test(item.nameEN)
+      );
+      if (findedMovies.length === 0) {
+        setMoviesSavedMessage("Ничего не найдено");
+      } else {
+        setMoviesSavedMessage("");
+        setUserMovies(findedMovies);
+      }
     }
   }
 
